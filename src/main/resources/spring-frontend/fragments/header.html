@@ -1,0 +1,22 @@
+<div th:fragment="header" class="header">
+    <img class="header-main__logo" th:src="@{/main_logo.png}" alt="logo">
+    <table class="header_content">
+        <tr>
+            <td>
+                <a href="../teacher.html" th:href="@{/teachers}">
+                    <input type="button" value="Преподаватели">
+                </a>
+            </td>
+            <td>
+                <a href="../student.html" th:href="@{/students}">
+                    <input type="button" value="Студенты">
+                </a>
+            </td>
+            <td>
+                <a href="../student_works.html" th:href="@{/works}">
+                    <input type="button" value="Все работы">
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>

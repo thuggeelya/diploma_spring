@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Преподаватели</title>
+    <link th:href="@{/common.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<header th:insert="fragments/header :: header"></header>
+    <div>
+        <h4>Поиск преподавателя </h4>
+
+        <form method="post" id="form" onsubmit="return false">
+            <label for="word"></label>
+            <input type="text" id="word" list="word_options">
+            <div id="word_options">
+                <div th:each="teacher : ${teacherList}" th:data-value="${teacher.getTeacher_id()}">
+                    <p th:data-value="${teacher.getEmail()}" th:text="${teacher.getLast_name()} + ' ' + ${teacher.getName()} + ' ' + ${teacher.getPatronymic()}"></p>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${specificTeacher}" th:with="t=${specificTeacher}">
+        <h1 id="lnp" th:text="${t.getLast_name()} + ' ' + ${t.getName()} + ' ' + ${t.getPatronymic()}"></h1>
+        <table id="teacher-info">
+            <tr>
+                <td th:text="${t.getDepartment().getName()} + ', ' + ${t.getDepartment().getSchool().getName()}"></td>
+            </tr>
+            <tr>
+                <td th:text="${t.getAcademicPosition().getName()} + ', ' + ${t.getDegree().getName()}"></td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td th:text="'E-mail: ' + ${t.getEmail()}"></td>
+            </tr>
+        </table><br>
+
+        <h4>Напишите преподавателю письмо, чтобы взять тему для научной работы</h4><br>
+        <button id="generate-letter-button">Сгенерировать текст письма</button><br><br>
+
+        <textarea class="letter" th:if="${numberOfComas} > 1" th:text="'Здравствуйте, ' + ${t.getName()} + ' ' + ${t.getPatronymic()} + '! Я хочу написать научно-исследовательскую работу под Вашим руководством. Мне известно, что Вы специализируетесь на таких направлениях, как ' + ${specialitiesWithComa} + 'и я так же планирую выбрать тему, связанную с одной или несколькими Вашими специализациями. Буду ждать Вашего ответа. С уважением, <ФИО>, <номер группы>, <номер курса>'"></textarea>
+        <textarea class="letter" th:if="${numberOfComas} <= 1" th:text="'Здравствуйте, ' + ${t.getName()} + ' ' + ${t.getPatronymic()} + '! Я хочу написать научно-исследовательскую работу под Вашим руководством. Мне известно, что Вы специализируетесь на таком направлении, как ' + ${specialitiesWithComa} + 'и я так же планирую выбрать тему, связанную с Вашей специализацией. Буду ждать Вашего ответа. С уважением, <ФИО>, <номер группы>, <номер курса>'"></textarea>
+    </div>
+
+    <script defer>
+        let letters = document.getElementsByClassName('letter');
+        for (let i = 0; i < letters.length; i++) {
+            letters[i].style.display = "none";
+        }
+
+        let word = document.getElementById('word');
+        let word_options = document.getElementById('word_options');
+
+        let teacherList = word_options.querySelectorAll('div');
+        teacherList.forEach(teacher => {
+            teacher.addEventListener('click', () => {
+                console.log(teacher.dataset.value);
+                window.location.href = `/teachers/${teacher.dataset.value}`;
+            });
+        });
+
+        window.addEventListener('load', () => {
+
+            word.addEventListener('input', (e) => {
+                let el = e.target;
+
+                if(el.value) {
+                    word_options.style.display = "block";
+                } else {
+                    word_options.style.display = "none";
+                }
+
+                let t;
+                let all = word_options.getElementsByTagName('div');
+                let ifNoCatches = false;
+                for (let i = 0; i < all.length; i++) {
+                    t = all[i];
+                    if(t.textContent.toUpperCase().includes(el.value.toUpperCase())) {
+                        t.style.display = "block";
+                        ifNoCatches = true;
+                    } else {
+                        t.style.display = "none";
+                    }
+                }
+
+                console.log(ifNoCatches);
+                if(ifNoCatches === false) {
+                    word_options.value = "";
+                }
+            });
+        });
+
+        document.getElementById('generate-letter-button').addEventListener('click', () => {
+            for (let i = 0; i < letters.length; i++) {
+                letters[i].style.display = "block";
+            }
+        })
+    </script>
+</body>
+
+</html>

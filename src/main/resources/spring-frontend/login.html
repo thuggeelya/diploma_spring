@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html dir="LTR" lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Подписаться</title>
+    <meta charset="UTF-8">
+    <style>
+        .OraHeaderSub
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 16pt;
+            color: #336699;
+        }
+        .OraInstructionText
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 10pt;
+            color: #000000;
+        }
+        .OraErrorHeader
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 11pt;
+            color: #CC0000;
+            font-weight: bold ;
+        }
+        .OraErrorText
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 10pt;
+            color: #000000;
+        }
+        .OraFieldText
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 10pt;
+            color: #000000;
+            font-weight: normal;
+        }
+        .OraCopyright
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 8pt;
+            color: #000000;
+        }
+        .OraHintText
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 9pt;
+            color: #000000;
+        }
+        .OraValueText
+        {
+            font-family: Arial, Helvetica, Geneva, sans-serif;
+            font-size: 10pt;
+            color: #000000;
+            font-weight: bold;
+        }
+    </style>
+
+</head><body bgcolor="#FFFFFF" onload="document.forms[0].ssousername.focus();">
+
+<!-- 20081219 new code for working with domains -->
+<!--############################################-->
+<script type="JavaScript">
+
+    window.onload = onLoad;
+
+    function onLoad() {
+        document.getElementById('login_error_fragment').style.display = 'none';
+    }
+
+    function checkform(form) { if(form.domen.value === 'guest') {form.ssousername.value=form.ssousername.value+'_guest';}  return true; }
+
+</script>
+<!--############################################-->
+
+<center>
+    <br>
+
+    <font class="OraHeaderSub">Вход в корпоративный портал ТПУ</font>
+    <br><br><br>
+    <font class="OraInstructionText">Введите имя пользователя и пароль для регистрации с уникальным паролем</font><br><br>
+
+    <div id="login_error_fragment" th:if="${errorMessage}">
+        <table summary="">
+            <tbody>
+            <tr>
+                <th id="c1" align="RIGHT">
+                    <label for="c1">
+                        <font class="OraErrorHeader">Ошибка:</font>
+                    </label></th>
+                <td headers="c1">
+                    <font class="OraErrorText" th:text="${errorMessage}"></font>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <table border="0" summary="">
+        <form method="post" th:action="@{/sso/auth}" autocomplete="off" onsubmit="return checkform(this)">
+
+        <tbody><tr>
+            <th id="c2" align="RIGHT"><label for="c2"><font class="OraFieldText">Имя пoльз.</font></label></th>
+            <td headers="c2"><input required="required" type="text" size="30" maxlength="50" id="c2" name="ssousername" value="" th:field="*{ssouser.email}"></td>
+
+        </tr>
+        <tr>
+            <th id="c3" align="RIGHT"><label for="c3"><font class="OraFieldText">Пароль</font></label></th>
+            <td headers="c3"> <input required="required" type="password" size="30" maxlength="50" id="c3" name="password" th:field="*{ssouser.password}"> </td>
+        </tr>
+
+        <tr>
+            <th id="c4" align="RIGHT"><label for="c4"><font class="OraFieldText">Domain</font></label></th>
+            <td headers="c4"> <select id="c4" name="domen"><option value="main" selected="">TPU</option><option value="guest">GUEST</option></select></td>
+        </tr>
+
+        <tr>
+            <th id="c5">&nbsp;</th>
+            <td headers="c5" align="left">
+                <font class="OraFieldText">
+                    <input type="submit" value="Вход">
+<!--                    <input type="button" name="p_request" value="Отмена" onclick="document.location.href = 'https://portal.tpu.ru/pls/portal/portal.home'">-->
+                </font>
+            </td>
+        </tr>
+
+        </tbody>
+        </form>
+    </table>
+    <br>
+    <font class="OraCopyright">Несанкционированное использование этого Web-узла запрещено и преследуется в соответствии с гражданским или уголовным правом.</font>
+    <center>
+
+    </center></center>
+</body>
+</html>
