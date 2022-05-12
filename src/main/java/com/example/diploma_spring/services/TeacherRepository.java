@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
-    Teacher findByEmail(String email);
+    @Query("select t from Teacher t where t.email = :email")
+    Teacher findByEmail(@Param("email") String email);
 
     @Query("select t from Teacher t where t.teacher_id = :id")
     Teacher findFirstByTeacher_id(@Param("id") Long id);

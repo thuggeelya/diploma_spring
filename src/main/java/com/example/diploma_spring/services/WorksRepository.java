@@ -1,9 +1,7 @@
 package com.example.diploma_spring.services;
 
 import com.example.diploma_spring.data.Scientific_work;
-import com.example.diploma_spring.data.Student;
 import com.example.diploma_spring.data.Student_work;
-import com.example.diploma_spring.data.Teacher;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +55,14 @@ public class WorksRepository {
     }
 
     @NotNull
-    private Map<Student_work, Scientific_work> getStudent_workScientific_workMap(List<Student_work> studentWorks) {
+    private Map<Student_work, Scientific_work> getStudent_workScientific_workMap(@NotNull List<Student_work> studentWorks) {
         List<Scientific_work> scientific_works = new ArrayList<>();
         studentWorks.sort(Comparator.comparing(Student_work::getMyStudentWorkKey));
         studentWorks.forEach(s -> scientific_works.add(scientificWorksRepository.findByWork_id(s.getMyStudentWorkKey().getWork_id())));
-        Map<Student_work, Scientific_work> map = new HashMap<>();
-        IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(studentWorks.get(i), scientific_works.get(i)));
-        return map;
+        return IntStream
+                .range(0, studentWorks.size())
+                .boxed()
+                .collect(Collectors.toMap(studentWorks::get, scientific_works::get, (a, b) -> b));
     }
 
     public Map<Student_work, Scientific_work> findByWork_Id(Long id) {

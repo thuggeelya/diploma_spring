@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    Student findByEmail(String email);
+    @Query("select s from Student s where s.email = :email")
+    Student findByEmail(@Param("email") String email);
 
     @Query("select s from Student s where s.personal_id = ?1")
     Student findByPersonal_id(Long personalId);

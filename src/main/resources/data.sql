@@ -17,6 +17,9 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 USE `mydb` ;
 
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS school;
 DROP TABLE IF EXISTS department;
 DROP TABLE IF EXISTS speciality;
@@ -30,6 +33,15 @@ DROP TABLE IF EXISTS teacher;
 DROP TABLE IF EXISTS academic_position;
 DROP TABLE IF EXISTS science_specialization;
 DROP TABLE IF EXISTS teacher_specialization;
+-- -----------------------------------------------------
+-- Table `mydb`.`user`
+-- -----------------------------------------------------
+CREATE TABLE `mydb`.`user` (
+    `email` VARCHAR(20) NOT NULL,
+    `password` VARCHAR(45) NOT NULL,
+    PRIMARY KEY (`email`));
+
+
 -- -----------------------------------------------------
 -- Table `mydb`.`school`
 -- -----------------------------------------------------
@@ -197,12 +209,20 @@ CREATE TABLE IF NOT EXISTS `mydb`.`student_work` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+
+-- -----------------------------------------------------
+-- Table `mydb`.`science_specialization`
+-- -----------------------------------------------------
 CREATE TABLE `science_specialization` (
     `specialization_id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(128) NOT NULL,
     PRIMARY KEY (`specialization_id`)
 );
 
+
+-- -----------------------------------------------------
+-- Table `mydb`.`teacher_specialization`
+-- -----------------------------------------------------
 CREATE TABLE `teacher_specialization` (
     `teacher_id` int NOT NULL,
     `specialization_id` int NOT NULL,
@@ -213,6 +233,35 @@ CREATE TABLE `teacher_specialization` (
     CONSTRAINT `fk_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`)
 );
 
+
+-- -----------------------------------------------------
+-- Table `mydb`.`role`
+-- -----------------------------------------------------
+CREATE TABLE `mydb`.`role` (
+    `role_id` INT NOT NULL,
+    `name` VARCHAR(45) NOT NULL,
+    PRIMARY KEY (`role_id`));
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`user_role`
+-- -----------------------------------------------------
+CREATE TABLE `mydb`.`user_role` (
+    `email` VARCHAR(45) NOT NULL,
+    `role_id` INT NOT NULL,
+    PRIMARY KEY (`email`, `role_id`),
+    INDEX `fk_role_idx` (`role_id` ASC) INVISIBLE,
+    INDEX `fk_email_idx` (`email` ASC) VISIBLE,
+    CONSTRAINT `fk_email`
+        FOREIGN KEY (`email`)
+            REFERENCES `mydb`.`user` (`email`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_role`
+        FOREIGN KEY (`role_id`)
+            REFERENCES `mydb`.`role` (`role_id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION);
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
@@ -289,6 +338,31 @@ INSERT INTO student (student_id, last_name, name, patronymic, email, personal_id
             VALUES (4,'Денисов','Денис','Денисович','ddd@tpu.ru',4,5);
 INSERT INTO student (student_id, last_name, name, patronymic, email, personal_id, group_id)
             VALUES (5,'Михайлов','Михаил','Михайлович','mmm@tpu.ru',5,5);
+
+INSERT INTO user(email, password) VALUES ('sod@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('oap@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('avv@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('see@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('zazi@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('iii@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('sss@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('ppp@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('ddd@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('mmm@tpu.ru', 123);
+
+INSERT INTO role(role_id, name) VALUES (1, 'ROLE_USER');
+INSERT INTO role(role_id, name) VALUES (2, 'ROLE_ADMIN');
+
+INSERT INTO user_role(email, role_id) VALUES ('sod@tpu.ru', 2);
+INSERT INTO user_role(email, role_id) VALUES ('oap@tpu.ru', 2);
+INSERT INTO user_role(email, role_id) VALUES ('avv@tpu.ru', 2);
+INSERT INTO user_role(email, role_id) VALUES ('see@tpu.ru', 2);
+INSERT INTO user_role(email, role_id) VALUES ('zazi@tpu.ru',2);
+INSERT INTO user_role(email, role_id) VALUES ('iii@tpu.ru', 1);
+INSERT INTO user_role(email, role_id) VALUES ('sss@tpu.ru', 1);
+INSERT INTO user_role(email, role_id) VALUES ('ppp@tpu.ru', 1);
+INSERT INTO user_role(email, role_id) VALUES ('ddd@tpu.ru', 1);
+INSERT INTO user_role(email, role_id) VALUES ('mmm@tpu.ru', 1);
 
 INSERT INTO scientific_work (work_id, title, teacher_id) VALUES (1,'Создание мобильного приложения на Android',1);
 INSERT INTO scientific_work (work_id, title, teacher_id) VALUES (2,'VR тренажер на Unity3D',2);
