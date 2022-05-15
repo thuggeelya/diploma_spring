@@ -38,9 +38,9 @@ public class WorksRepository {
         List<Student_work> studentWorks = new ArrayList<>();
         val scientific_works = scientificWorksRepository.findByTeacherTeacher_id(id);
         scientific_works.sort(Comparator.comparing(Scientific_work::getWork_id));
-        scientific_works.forEach(s -> studentWorks.add(studentWorksRepository.findByWork_Id(s.getWork_id()).get()));
+        scientific_works.forEach(s -> studentWorks.addAll(studentWorksRepository.findByWork_Id(s.getWork_id())));
         Map<Student_work, Scientific_work> map = new HashMap<>();
-        IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(studentWorks.get(i), scientific_works.get(i)));
+        IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(studentWorks.get(i), scientificWorksRepository.findByWork_id(studentWorks.get(i).getMyStudentWorkKey().getWork_id())));
         return map;
     }
 
@@ -67,11 +67,16 @@ public class WorksRepository {
 
     public Map<Student_work, Scientific_work> findByWork_Id(Long id) {
         Map<Student_work, Scientific_work> map = new TreeMap<>(Comparator.comparing(Student_work::getMyStudentWorkKey));
-        map.put(studentWorksRepository.findByWork_Id(id).get(), scientificWorksRepository.findByWork_id(id));
+        map.put(studentWorksRepository.findByWork_Id(id).get(0), scientificWorksRepository.findByWork_id(id));
         return map;
     }
 
     public List<Student_work> findAllByWork_id(Long work_id) {
         return studentWorksRepository.findAllByWork_Id(work_id);
+    }
+
+    public void save(Scientific_work w1, Student_work w2) {
+        scientificWorksRepository.save(w1);
+        studentWorksRepository.save(w2);
     }
 }

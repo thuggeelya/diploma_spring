@@ -1,8 +1,6 @@
 package com.example.diploma_spring.controllers;
 
-import com.example.diploma_spring.data.Student;
-import com.example.diploma_spring.data.Student_work;
-import com.example.diploma_spring.data.Teacher;
+import com.example.diploma_spring.data.*;
 import com.example.diploma_spring.services.WorksService;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -42,6 +42,11 @@ public class WorksController {
                 .sorted(Student.comparatorStudent()).toList();
     }
 
+    @ModelAttribute("newStudentList")
+    public List<Student> newStudentList() {
+        return new ArrayList<>();
+    }
+
     @GetMapping("/works")
     public String worksPage(@NotNull Model model) {
         worksService.findAllWorks().keySet().forEach(s -> Logger.getLogger(this.getClass().getName()).info(s.toString()));
@@ -55,7 +60,7 @@ public class WorksController {
         return "student_works";
     }
 
-    @PostMapping("/works/filter/teacher/{id}")
+    @GetMapping("/works/filter/teacher/{id}")
     public String filterTeacher(@PathVariable("id") Long id, @NotNull Model model) {
         worksService.findWorksByTeacher_id(id).keySet().forEach(s -> Logger.getLogger(this.getClass().getName()).info(s.toString()));
 
@@ -90,5 +95,13 @@ public class WorksController {
              .addAttribute("tempWork", new Student_work());
 
         return "student_works";
+    }
+
+    @PostMapping("/works/save")
+    public String save(@ModelAttribute("tempWork") Student_work newStudentWork,
+                       @ModelAttribute("newStudentList") List<Student> newStudentList,
+                       @NotNull HttpServletRequest request) {
+        worksService.save(newStudentList, newStudentWork, (User) request.getSession().getAttribute("ssouser"));
+        return "redirect:/works";
     }
 }

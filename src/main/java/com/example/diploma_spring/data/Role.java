@@ -4,10 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,7 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@NoArgsConstructor
 @ToString
 public class Role implements GrantedAuthority {
 
@@ -23,7 +19,18 @@ public class Role implements GrantedAuthority {
     private Long id;
     private String name;
     @Transient
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(
+                    name = "role_id",
+                    referencedColumnName = "role_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "email",
+                    referencedColumnName = "email"
+            )
+    )
     @ToString.Exclude
     private Set<User> users;
 

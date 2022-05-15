@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <title>Работы</title>
     <link th:href="@{/common.css}" rel="stylesheet" type="text/css">
+    <style>
+
+    </style>
 </head>
 <body>
 <header th:insert="fragments/header :: header"></header>
+<button id="create_work"></button>
+<form method="post" th:action="@{/works/save}">
+    <h4>Тема</h4>
+    <input type="text" th:field="*{tempWork.title}">
+    <h4>Тип</h4>
+    <input type="text" th:field="*{tempWork.type.name}">
+    <h4>Студенты</h4>
+    <input type="text" list="students">
+    <datalist id="students">
+        <option th:each="s : ${studentList}" th:value="${s.last_name} + ' ' + ${s.name} + ' ' + ${s.patronymic}"></option>
+    </datalist>
+
+    <input type="submit" value="Создать">
+</form>
 <div id="works">
     <div th:each="work, iter : ${workList}">
         <p class="work-title" th:text="${iter.index + 1} + '. ' + ${work.title}"></p>
@@ -112,8 +129,8 @@
     teacherList.forEach(teacher => {
         teacher.addEventListener('click', () => {
             console.log(teacher.dataset.value);
-            word_teachers.setAttribute('value', teacher.dataset.text);
-            // window.location.href = `/works/filter/teacher/${teacher.dataset.value}`;
+            // word_teachers.setAttribute('value', teacher.dataset.text);
+            window.location.href = `/works/filter/teacher/${teacher.dataset.value}`;
         });
     });
 

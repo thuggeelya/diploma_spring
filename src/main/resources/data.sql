@@ -10,10 +10,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 USE `mydb` ;
 
@@ -33,6 +29,7 @@ DROP TABLE IF EXISTS teacher;
 DROP TABLE IF EXISTS academic_position;
 DROP TABLE IF EXISTS science_specialization;
 DROP TABLE IF EXISTS teacher_specialization;
+DROP TABLE IF EXISTS review;
 -- -----------------------------------------------------
 -- Table `mydb`.`user`
 -- -----------------------------------------------------
@@ -108,6 +105,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`student` (
   `group_id` INT NOT NULL,
   PRIMARY KEY (`student_id`),
   INDEX `fk_student` (`group_id` ASC) VISIBLE,
+  INDEX `fk_user_student_idx` (`email` ASC) VISIBLE,
+  CONSTRAINT `fk_user_student`
+      FOREIGN KEY (`email`)
+          REFERENCES `mydb`.`user` (`email`)
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION,
   CONSTRAINT `fk_student`
     FOREIGN KEY (`group_id`)
     REFERENCES `mydb`.`group_` (`group_id`));
@@ -148,6 +151,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`teacher` (
   INDEX `fk_teacher_acad_pos` (`acad_pos_id` ASC) VISIBLE,
   INDEX `fk_teacher_department` (`department_id` ASC) VISIBLE,
   INDEX `fk_teacher_degree` (`degree_id` ASC) VISIBLE,
+  INDEX `fk_user_teacher_idx` (`email` ASC) VISIBLE,
   CONSTRAINT `fk_teacher_acad_pos`
     FOREIGN KEY (`acad_pos_id`)
     REFERENCES `mydb`.`academic_position` (`acad_pos_id`),
@@ -156,8 +160,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`teacher` (
     REFERENCES `mydb`.`department` (`department_id`),
   CONSTRAINT `fk_teacher_degree`
     FOREIGN KEY (`degree_id`)
-    REFERENCES `mydb`.`science_degree` (`degree_id`));
-
+    REFERENCES `mydb`.`science_degree` (`degree_id`),
+  CONSTRAINT `fk_user_teacher`
+      FOREIGN KEY (`email`)
+          REFERENCES `mydb`.`user` (`email`)
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION);
 
 -- -----------------------------------------------------
 -- Table `mydb`.`scientific_work`
@@ -268,6 +276,30 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 -- -----------------------------------------------------
+-- Table `mydb`.`review`
+-- -----------------------------------------------------
+CREATE TABLE `mydb`.`review` (
+    `review_id` INT NOT NULL,
+    `from_email` VARCHAR(20) NOT NULL,
+    `of_email` VARCHAR(20) NOT NULL,
+    `comment` VARCHAR(45) NOT NULL,
+    `creation_date` DATE NOT NULL,
+    INDEX `fk_from_idx` (`from_email` ASC) VISIBLE,
+    INDEX `fk_of_idx` (`of_email` ASC) VISIBLE,
+    CONSTRAINT `fk_from`
+        FOREIGN KEY (`from_email`)
+            REFERENCES `mydb`.`user` (`email`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_of`
+        FOREIGN KEY (`of_email`)
+            REFERENCES `mydb`.`user` (`email`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    PRIMARY KEY (`review_id`));
+
+
+-- -----------------------------------------------------
 -- inserts
 -- -----------------------------------------------------
 INSERT INTO student_work_type (type, name) VALUES ('ТП' ,'Творческий проект');
@@ -317,6 +349,17 @@ INSERT INTO group_ (group_id, name, enrollment_year, course, speciality_id)
 INSERT INTO group_ (group_id, name, enrollment_year, course, speciality_id)
             VALUES (5,'0В81',2020,4,5);
 
+INSERT INTO user(email, password) VALUES ('sod@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('oap@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('avv@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('see@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('zazi@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('iii@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('sss@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('ppp@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('ddd@tpu.ru', 123);
+INSERT INTO user(email, password) VALUES ('mmm@tpu.ru', 123);
+
 INSERT INTO teacher (teacher_id, last_name, name, patronymic, email, personal_id, acad_pos_id, department_id, degree_id)
 VALUES (1,'Севостьянова','Ольга','Дмитриевна','sod@tpu.ru',10001,1,1,1);
 INSERT INTO teacher (teacher_id, last_name, name, patronymic, email, personal_id, acad_pos_id, department_id, degree_id)
@@ -338,17 +381,6 @@ INSERT INTO student (student_id, last_name, name, patronymic, email, personal_id
             VALUES (4,'Денисов','Денис','Денисович','ddd@tpu.ru',4,5);
 INSERT INTO student (student_id, last_name, name, patronymic, email, personal_id, group_id)
             VALUES (5,'Михайлов','Михаил','Михайлович','mmm@tpu.ru',5,5);
-
-INSERT INTO user(email, password) VALUES ('sod@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('oap@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('avv@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('see@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('zazi@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('iii@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('sss@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('ppp@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('ddd@tpu.ru', 123);
-INSERT INTO user(email, password) VALUES ('mmm@tpu.ru', 123);
 
 INSERT INTO role(role_id, name) VALUES (1, 'ROLE_USER');
 INSERT INTO role(role_id, name) VALUES (2, 'ROLE_ADMIN');

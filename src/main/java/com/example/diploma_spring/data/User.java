@@ -13,7 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@NoArgsConstructor
 @ToString
 @Entity
 public class User implements UserDetails {
@@ -22,6 +21,19 @@ public class User implements UserDetails {
     private String email;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
+    @Transient
+    @ToString.Exclude
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(
+                    name = "email",
+                    referencedColumnName = "email"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id",
+                    referencedColumnName = "role_id"
+            )
+    )
     private Set<Role> roles;
 
     @Transient

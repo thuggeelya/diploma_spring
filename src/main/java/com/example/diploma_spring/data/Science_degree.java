@@ -25,6 +25,7 @@ public class Science_degree {
 
     @OneToMany
     @ToString.Exclude
+    @Transient
     private List<Teacher> teacherList = new ArrayList<>();
 
     @Override

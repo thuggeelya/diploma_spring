@@ -77,25 +77,25 @@
 <center>
     <br>
 
-    <font class="OraHeaderSub">Вход в корпоративный портал ТПУ</font>
+    <font class="OraHeaderSub">Вход в систему учета проектной деятельности ТПУ</font>
     <br><br><br>
     <font class="OraInstructionText">Введите имя пользователя и пароль для регистрации с уникальным паролем</font><br><br>
 
-    <div id="login_error_fragment" th:if="${errorMessage}">
-        <table summary="">
-            <tbody>
-            <tr>
-                <th id="c1" align="RIGHT">
-                    <label for="c1">
-                        <font class="OraErrorHeader">Ошибка:</font>
-                    </label></th>
-                <td headers="c1">
-                    <font class="OraErrorText" th:text="${errorMessage}"></font>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+<!--    <div id="login_error_fragment" th:if="${errorMessage} != null">-->
+<!--        <table summary="">-->
+<!--            <tbody>-->
+<!--            <tr>-->
+<!--                <th id="c1" align="RIGHT">-->
+<!--                    <label for="c1">-->
+<!--                        <font class="OraErrorHeader">Ошибка:</font>-->
+<!--                    </label></th>-->
+<!--                <td headers="c1">-->
+<!--                    <font class="OraErrorText" th:text="${errorMessage}"></font>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
     <table border="0" summary="">
         <form method="post" th:action="@{/sso/auth}" autocomplete="off" onsubmit="return checkform(this)">
 
@@ -110,8 +110,8 @@
         </tr>
 
         <tr>
-            <th id="c4" align="RIGHT"><label for="c4"><font class="OraFieldText">Domain</font></label></th>
-            <td headers="c4"> <select id="c4" name="domen"><option value="main" selected="">TPU</option><option value="guest">GUEST</option></select></td>
+            <th id="c4" align="RIGHT"><label for="c4"><font class="OraFieldText">Тип</font></label></th>
+            <td headers="c4"> <select id="c4" name="domen"><option value="student" selected="">Студент</option><option value="teacher">Преподаватель</option></select></td>
         </tr>
 
         <tr>

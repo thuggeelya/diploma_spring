@@ -6,52 +6,6 @@
     <link th:href="@{/common.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
-<header class="header">
-    <div class="header-top">
-        <div class="header-top__wrapper">
-
-            <div class="header-top__current-date current-date">
-            <span class="current-date__short">
-            05/05
-            </span>
-            </div>
-
-            <a class="header-top__rasp-link" href="http://rasp.tpu.ru/" target="_blank" title="Расписание">
-            <span>
-                Расписание
-            </span>
-            </a>
-
-        </div>
-    </div>
-
-    <div class="header-main">
-        <div class="header-main__wrapper">
-
-            <h1 class="header-main__logo">
-                <a class="header-main__logo-link institute-logo institute-logo_tpu-big" href="/">
-                    Национальный исследовательский Томский политехнический университет
-                </a>
-            </h1>
-
-
-            <ul class="header-main__university-nav">
-                <li><a href="/university/structure/schools">Школы</a></li>
-                <li><a href="/university/structure/department">Подразделения</a></li>
-                <li><a href="https://staff.tpu.ru/personal" target="_blank">Сотрудники</a></li>
-            </ul>
-        </div>
-
-    </div>
-
-        <div class="page-header__wrapper">
-            <h1 class="page-header__title">
-                Отделения
-            </h1>
-
-
-        </div>
-
-</header>
+<header th:insert="fragments/header :: header"></header>
 </body>
 </html>

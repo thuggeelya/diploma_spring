@@ -14,7 +14,7 @@ public interface StudentWorksRepository extends JpaRepository<Student_work, Long
 //    List<Student_work> findByMyStudentWorkKey_StudentId(Long id);
 
     @Query("select s from Student_work s where s.myStudentWorkKey.work_id = ?1")
-    Optional<Student_work> findByWork_Id(Long aLong);
+    List<Student_work> findByWork_Id(Long aLong);
 
     @Query("select s from Student_work s where upper(s.title) like upper(concat('%', :title, '%'))")
     List<Student_work> findAllByTitleContaining(@Param("title") String title);

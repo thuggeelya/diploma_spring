@@ -1,13 +1,12 @@
 package com.example.diploma_spring.services;
 
-import com.example.diploma_spring.data.Scientific_work;
-import com.example.diploma_spring.data.Student;
-import com.example.diploma_spring.data.Student_work;
-import com.example.diploma_spring.data.Teacher;
+import com.example.diploma_spring.data.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,5 +57,20 @@ public class WorksService {
                 .map(w -> findStudentById(w.getMyStudentWorkKey().getStudentId())).collect(Collectors.toSet())
                 .stream()
                 .toList();
+    }
+
+    public synchronized void save(@NotNull List<Student> list, Student_work w, User user) {
+        list.forEach(s -> {
+            w.getMyStudentWorkKey().setStudentId(s.getStudent_id());
+            Scientific_work wSc = new Scientific_work();
+
+            Logger.getLogger(WorksService.class.getName()).info(w.getMyStudentWorkKey().getWork_id().toString());
+
+            wSc.setWork_id(w.getMyStudentWorkKey().getWork_id());
+            wSc.setTitle(w.getTitle());
+            wSc.setTeacher(teacherRepository.findByEmail(user.getUsername()));
+
+            worksRepository.save(wSc, w);
+        });
     }
 }
