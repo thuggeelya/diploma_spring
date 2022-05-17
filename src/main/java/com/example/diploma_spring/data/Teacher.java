@@ -26,6 +26,7 @@ public class Teacher extends Person {
     private String name;
     private String patronymic;
     private String email;
+    @Column(unique=true)
     private Long personal_id;
 
     @ManyToOne

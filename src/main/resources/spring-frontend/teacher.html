@@ -25,7 +25,7 @@
         <h1 id="lnp" th:text="${t.getLast_name()} + ' ' + ${t.getName()} + ' ' + ${t.getPatronymic()}"></h1>
         <table id="teacher-info">
             <tr>
-                <td th:text="${t.getDepartment().getName()} + ', ' + ${t.getDepartment().getSchool().getName()}"></td>
+                <td th:text="${t.getDepartment().getName()}"></td>
             </tr>
             <tr>
                 <td th:text="${t.getAcademicPosition().getName()} + ', ' + ${t.getDegree().getName()}"></td>

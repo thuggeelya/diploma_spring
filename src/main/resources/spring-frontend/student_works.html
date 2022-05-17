@@ -10,20 +10,6 @@
 </head>
 <body>
 <header th:insert="fragments/header :: header"></header>
-<button id="create_work"></button>
-<form method="post" th:action="@{/works/save}">
-    <h4>Тема</h4>
-    <input type="text" th:field="*{tempWork.title}">
-    <h4>Тип</h4>
-    <input type="text" th:field="*{tempWork.type.name}">
-    <h4>Студенты</h4>
-    <input type="text" list="students">
-    <datalist id="students">
-        <option th:each="s : ${studentList}" th:value="${s.last_name} + ' ' + ${s.name} + ' ' + ${s.patronymic}"></option>
-    </datalist>
-
-    <input type="submit" value="Создать">
-</form>
 <div id="works">
     <div th:each="work, iter : ${workList}">
         <p class="work-title" th:text="${iter.index + 1} + '. ' + ${work.title}"></p>
@@ -39,8 +25,28 @@
         <br>
     </div>
 </div>
+
+<div id="create_work">
+    <button id="create_work_button"></button>
+
+    <form method="post" th:action="@{/works/save}">
+        <h4>Тема</h4>
+        <input type="text" th:field="*{tempWork.title}">
+        <h4>Тип</h4>
+        <input type="text" th:field="*{tempWork.type.name}">
+        <h4>Студенты</h4>
+        <input type="text" list="students">
+        <datalist id="students">
+            <option th:each="s : ${studentList}" th:value="${s.last_name} + ' ' + ${s.name} + ' ' + ${s.patronymic}"></option>
+        </datalist>
+
+        <input type="submit" value="Создать">
+    </form>
+</div>
+
 <details id="work_filters">
     <summary>Фильтровать</summary><br>
+
     <div id="teacher_filter">
         <h4>Научный руководитель </h4>
 
@@ -54,6 +60,7 @@
             </div>
         </form>
     </div>
+
     <div id="student_filter">
         <h4>Студент </h4>
 
@@ -67,6 +74,7 @@
             </div>
         </form>
     </div>
+
     <div id="title_filter">
         <h4>Тема </h4>
 
@@ -79,47 +87,47 @@
 
 <script defer>
     // students
-    // let word_students = document.getElementById('word_students');
-    // let word_options_students = document.getElementById('word_options_students');
-    //
-    // let studentList = word_options_students.querySelectorAll('div');
-    // studentList.forEach(student => {
-    //     student.addEventListener('click', () => {
-    //         console.log(student.dataset.value);
-    //         window.location.href = `/students/${student.dataset.value}`;
-    //     });
-    // });
-    //
-    // window.addEventListener('load', () => {
-    //
-    //     word_students.addEventListener('input', (e) => {
-    //         let el = e.target;
-    //
-    //         if(el.value) {
-    //             word_options_students.style.display = "block";
-    //         } else {
-    //             word_options_students.style.display = "none";
-    //         }
-    //
-    //         let t;
-    //         let all = word_options_students.getElementsByTagName('div');
-    //         let ifNoCatches = false;
-    //         for (let i = 0; i < all.length; i++) {
-    //             t = all[i];
-    //             if(t.textContent.toUpperCase().includes(el.value.toUpperCase())) {
-    //                 t.style.display = "block";
-    //                 ifNoCatches = true;
-    //             } else {
-    //                 t.style.display = "none";
-    //             }
-    //         }
-    //
-    //         console.log(ifNoCatches);
-    //         if(ifNoCatches === false) {
-    //             word_options_students.value = "";
-    //         }
-    //     });
-    // });
+    let word_students = document.getElementById('word_students');
+    let word_options_students = document.getElementById('word_options_students');
+
+    let studentList = word_options_students.querySelectorAll('div');
+    studentList.forEach(student => {
+        student.addEventListener('click', () => {
+            console.log(student.dataset.value);
+            window.location.href = `/works/filter/student/${student.dataset.value}`;
+        });
+    });
+
+    window.addEventListener('load', () => {
+
+        word_students.addEventListener('input', (e) => {
+            let el = e.target;
+
+            if(el.value) {
+                word_options_students.style.display = "block";
+            } else {
+                word_options_students.style.display = "none";
+            }
+
+            let t;
+            let all = word_options_students.getElementsByTagName('div');
+            let ifNoCatches = false;
+            for (let i = 0; i < all.length; i++) {
+                t = all[i];
+                if(t.textContent.toUpperCase().includes(el.value.toUpperCase())) {
+                    t.style.display = "block";
+                    ifNoCatches = true;
+                } else {
+                    t.style.display = "none";
+                }
+            }
+
+            console.log(ifNoCatches);
+            if(ifNoCatches === false) {
+                word_options_students.value = "";
+            }
+        });
+    });
 
     // teachers
     let word_teachers = document.getElementById('word_teachers');

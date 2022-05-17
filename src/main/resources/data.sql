@@ -403,15 +403,15 @@ INSERT INTO scientific_work (work_id, title, teacher_id) VALUES (4,'Проект
 INSERT INTO scientific_work (work_id, title, teacher_id) VALUES (5,'Облачное приложение для помощи бездомным животным',2);
 
 INSERT INTO student_work (student_id, work_id, title, start_date, completion_date, score, type)
-            VALUES (1,1,'Создание мобильного приложения на Android','2018-09-01','2018-12-01',5,'ТП');
+            VALUES (1,1,'Создание мобильного приложения на Android','2018-09-01','2018-12-01',55,'ТП');
 INSERT INTO student_work (student_id, work_id, title, start_date, completion_date, score, type)
-            VALUES (2,2,'VR тренажер на Unity3D','2018-09-01','2018-12-01',4,'ТП');
+            VALUES (2,2,'VR тренажер на Unity3D','2018-09-01','2018-12-01',60,'ТП');
+INSERT INTO student_work (student_id, work_id, title, start_date, completion_date, score, leave_reason, type)
+            VALUES (3,3,'Распознавание лиц с помощью библиотеки Tesseract','2020-09-01','2020-11-03',0,'Работа не была сделана студентом','Пр');
 INSERT INTO student_work (student_id, work_id, title, start_date, completion_date, score, type)
-            VALUES (3,3,'Распознавание лиц с помощью библиотеки Tesseract','2020-09-01','2020-12-03',4,'Пр');
+            VALUES (4,4,'Проектирование системы расписания ТПУ','2022-02-01','2022-07-20',100,'Пр');
 INSERT INTO student_work (student_id, work_id, title, start_date, completion_date, score, type)
-            VALUES (4,4,'Проектирование системы расписания ТПУ','2021-09-01','2022-01-20',5,'Пр');
-INSERT INTO student_work (student_id, work_id, title, start_date, completion_date, score, type)
-            VALUES (5,4,'Проектирование системы расписания ТПУ','2021-09-01','2022-01-20',5,'Пр');
+            VALUES (5,4,'Проектирование системы расписания ТПУ','2022-02-01','2022-07-20',100,'Пр');
 
 INSERT INTO science_specialization(specialization_id, name) VALUES (1, 'Машинное обучение');
 INSERT INTO science_specialization(specialization_id, name) VALUES (2, 'Big Data');

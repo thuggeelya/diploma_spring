@@ -51,9 +51,9 @@ public class WorksController {
     public String worksPage(@NotNull Model model) {
         worksService.findAllWorks().keySet().forEach(s -> Logger.getLogger(this.getClass().getName()).info(s.toString()));
 
-        val studentForWorkMap = worksService.findAllWorks().keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getMyStudentWorkKey().getWork_id()), (a, b) -> b));
-        model.addAttribute("workList", worksService.findAllWorks().keySet().stream().toList())
-             .addAttribute("scientificWorkList", worksService.findAllWorks().values().stream().toList())
+        val studentForWorkMap = worksService.findAllWorks().keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getWork_id()), (a, b) -> b));
+        model.addAttribute("workList", worksService.findAllWorks().values().stream().toList())
+             .addAttribute("scientificWorkList", worksService.findAllWorks().keySet().stream().toList())
              .addAttribute("studentForWorkMap", studentForWorkMap)
              .addAttribute("tempWork", new Student_work());
 
@@ -64,33 +64,35 @@ public class WorksController {
     public String filterTeacher(@PathVariable("id") Long id, @NotNull Model model) {
         worksService.findWorksByTeacher_id(id).keySet().forEach(s -> Logger.getLogger(this.getClass().getName()).info(s.toString()));
 
-        val studentForWorkMap = worksService.findWorksByTeacher_id(id).keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getMyStudentWorkKey().getWork_id()), (a, b) -> b));
-        model.addAttribute("workList", worksService.findWorksByTeacher_id(id).keySet().stream().toList())
-             .addAttribute("scientificWorkList", worksService.findWorksByTeacher_id(id).values().stream().toList())
+        val studentForWorkMap = worksService.findWorksByTeacher_id(id).keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getWork_id()), (a, b) -> b));
+        model.addAttribute("workList", worksService.findWorksByTeacher_id(id).values().stream().toList())
+             .addAttribute("scientificWorkList", worksService.findWorksByTeacher_id(id).keySet().stream().toList())
              .addAttribute("studentForWorkMap", studentForWorkMap)
              .addAttribute("tempWork", new Student_work());
 
         return "student_works";
     }
 
-//    @PostMapping("/works/filter/student/{id}")
-//    public String filterStudent(@PathVariable("id") Long id, @NotNull Model model) {
-//        Map<Student_work, List<Student>> studentForWorkMap = worksService.findByStudent_id(id).keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getMyStudentWorkKey().getWork_id()), (a, b) -> b));
-//        model.addAttribute("workList", worksService.findByStudent_id(id).keySet().stream().toList())
-//             .addAttribute("teacherForWorkList", worksService.findByStudent_id(id).values().stream().toList())
-//             .addAttribute("studentForWorkMap", studentForWorkMap)
-//             .addAttribute("tempWork", new Student_work());
-//
-//        return "student_works";
-//    }
+    @GetMapping("/works/filter/student/{id}")
+    public String filterStudent(@PathVariable("id") Long id, @NotNull Model model) {
+        worksService.findWorksByStudent_id(id).keySet().forEach(s -> Logger.getLogger(this.getClass().getName()).info(s.toString()));
+
+        val studentForWorkMap = worksService.findWorksByStudent_id(id).keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getWork_id()), (a, b) -> b));
+        model.addAttribute("workList", worksService.findWorksByStudent_id(id).values().stream().toList())
+                .addAttribute("scientificWorkList", worksService.findWorksByStudent_id(id).keySet().stream().toList())
+                .addAttribute("studentForWorkMap", studentForWorkMap)
+                .addAttribute("tempWork", new Student_work());
+
+        return "student_works";
+    }
 
     @PostMapping("/works/filter/title")
     public String filterTitle(@ModelAttribute("tempWork") @NotNull Student_work tempWork, @NotNull Model model) {
         worksService.findByTitle(tempWork.getTitle()).keySet().forEach(s -> Logger.getLogger(this.getClass().getName()).info(s.toString()));
 
-        val studentForWorkMap = worksService.findByTitle(tempWork.getTitle()).keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getMyStudentWorkKey().getWork_id()), (a, b) -> b));
-        model.addAttribute("workList", worksService.findByTitle(tempWork.getTitle()).keySet().stream().toList())
-             .addAttribute("scientificWorkList", worksService.findByTitle(tempWork.getTitle()).values().stream().toList())
+        val studentForWorkMap = worksService.findByTitle(tempWork.getTitle()).keySet().stream().toList().stream().collect(Collectors.toMap(s -> s, s -> worksService.findStudentsByWork_id(s.getWork_id()), (a, b) -> b));
+        model.addAttribute("workList", worksService.findByTitle(tempWork.getTitle()).values().stream().toList())
+             .addAttribute("scientificWorkList", worksService.findByTitle(tempWork.getTitle()).keySet().stream().toList())
              .addAttribute("studentForWorkMap", studentForWorkMap)
              .addAttribute("tempWork", new Student_work());
 

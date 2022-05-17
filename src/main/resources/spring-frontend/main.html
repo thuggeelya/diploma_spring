@@ -4,8 +4,72 @@
     <meta charset="UTF-8">
     <title>Главная</title>
     <link th:href="@{/common.css}" rel="stylesheet" type="text/css">
+    <style>
+        #tp_info {
+            display: none;
+        }
+        #pr_info {
+            display: none;
+        }
+
+        input#tp_radio:checked ~ #tp_info {
+            display: block;
+        }
+        input#tp_radio:checked ~ #pr_info {
+            display: none;
+        }
+
+        input#pr_radio:checked ~ #pr_info {
+            display: block;
+        }
+        input#pr_radio:checked ~ #tp_info {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <header th:insert="fragments/header :: header"></header>
+<div>
+    <label for="tp_radio">Творческий проект</label><input name="types_radio" type="radio" id="tp_radio" value="Творческий проект">
+    <label for="pr_radio">Научно-исследовательский проект</label><input name="types_radio" checked="checked" type="radio" id="pr_radio" value="Научно-исследовательский проект">
+<div id="tp_info" name="tp_info">
+    <p>Прямо сейчас <strong>творческий проект</strong> делает: <strong th:text="${tpCount}"></strong> студентов</p>
+
+    <table>
+        <tr>
+            <td>1 курс</td>
+            <td></td>
+            <td th:text="${tp1Count} + ' чел.'"></td>
+        </tr>
+        <tr>
+            <td>2 курс</td>
+            <td></td>
+            <td th:text="${tp2Count} + ' чел.'"></td>
+        </tr>
+    </table>
+</div>
+
+<div id="pr_info" name="pr_info">
+    <p>Прямо сейчас <strong>научно-исследовательский проект</strong> делает: <strong th:text="${prCount}"></strong> студентов</p>
+
+    <table>
+        <tr>
+            <td>2 курс</td>
+            <td></td>
+            <td th:text="${pr2Count} + ' чел.'"></td>
+        </tr>
+        <tr>
+            <td>3 курс</td>
+            <td></td>
+            <td th:text="${pr3Count} + ' чел.'"></td>
+        </tr>
+        <tr>
+            <td>4 курс</td>
+            <td></td>
+            <td th:text="${pr4Count} + ' чел.'"></td>
+        </tr>
+    </table>
+</div>
+</div>
 </body>
 </html>

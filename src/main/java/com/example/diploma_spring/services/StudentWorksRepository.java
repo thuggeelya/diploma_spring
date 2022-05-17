@@ -7,14 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public interface StudentWorksRepository extends JpaRepository<Student_work, Long> {
 
-//    List<Student_work> findByMyStudentWorkKey_StudentId(Long id);
-
-    @Query("select s from Student_work s where s.myStudentWorkKey.work_id = ?1")
-    List<Student_work> findByWork_Id(Long aLong);
+    @Query("select s from Student_work s where s.myStudentWorkKey.studentId = ?1")
+    List<Student_work> findByStudentStudent_id(Long id);
 
     @Query("select s from Student_work s where upper(s.title) like upper(concat('%', :title, '%'))")
     List<Student_work> findAllByTitleContaining(@Param("title") String title);
@@ -24,4 +21,12 @@ public interface StudentWorksRepository extends JpaRepository<Student_work, Long
 
     @Query("select s from Student_work s where s.myStudentWorkKey.work_id = ?1")
     List<Student_work> findAllByWork_Id(Long work_id);
+
+    @Query("""
+            select count(s) from Student_work s
+            where s.type.name = ?1 and s.completion_date > ?2 or s.completion_date is null""")
+    long countAllByType_NameAndCompletion_dateIsGreaterThanOrCompletion_dateIsNull(String name, Date date);
+
+    @Query("select s from Student_work s where s.type.name = ?1 and s.completion_date > ?2 or s.completion_date is null")
+    List<Student_work> findAllByType_NameAndCompletion_dateGreaterThanOrCompletion_dateIsNull(String name, Date date);
 }

@@ -3,7 +3,6 @@ package com.example.diploma_spring.services;
 import com.example.diploma_spring.data.Scientific_work;
 import com.example.diploma_spring.data.Student_work;
 import com.example.diploma_spring.data.Teacher;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +35,7 @@ public class ProfileService {
             scientific_works = scientificWorksRepository.findByTeacherTeacher_id(id);
             scientific_works.sort(Comparator.comparing(Scientific_work::getWork_id));
             List<Student_work> finalStudentWorks = studentWorks;
-            scientific_works.forEach(s -> finalStudentWorks.addAll(studentWorksRepository.findByWork_Id(s.getWork_id())));
+            scientific_works.forEach(s -> finalStudentWorks.addAll(studentWorksRepository.findAllByWork_Id(s.getWork_id())));
             List<Scientific_work> finalScientific_works = scientific_works;
             map = new HashMap<>();
             IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(finalStudentWorks.get(i), finalScientific_works.get(i)));

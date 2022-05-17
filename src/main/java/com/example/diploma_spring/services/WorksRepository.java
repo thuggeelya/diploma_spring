@@ -24,50 +24,55 @@ public class WorksRepository {
         this.scientificWorksRepository = scientificWorksRepository;
     }
 
-    public Map<Student_work, Scientific_work> findAllWorks() {
+    public Map<Scientific_work, Student_work> findAllWorks() {
         val studentWorks = studentWorksRepository.findAll();
         val scientific_works = scientificWorksRepository.findAll();
         studentWorks.sort(Comparator.comparing(Student_work::getMyStudentWorkKey));
         scientific_works.sort(Comparator.comparing(Scientific_work::getWork_id));
-        Map<Student_work, Scientific_work> map = new HashMap<>();
-        IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(studentWorks.get(i), scientific_works.get(i)));
+        Map<Scientific_work, Student_work> map = new HashMap<>();
+        IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(scientific_works.get(i), studentWorks.get(i)));
         return map;
     }
 
-    public Map<Student_work, Scientific_work> findWorksByTeacherTeacher_id(Long id) {
+    public Map<Scientific_work, Student_work> findWorksByTeacherTeacher_id(Long id) {
         List<Student_work> studentWorks = new ArrayList<>();
         val scientific_works = scientificWorksRepository.findByTeacherTeacher_id(id);
         scientific_works.sort(Comparator.comparing(Scientific_work::getWork_id));
-        scientific_works.forEach(s -> studentWorks.addAll(studentWorksRepository.findByWork_Id(s.getWork_id())));
-        Map<Student_work, Scientific_work> map = new HashMap<>();
-        IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(studentWorks.get(i), scientificWorksRepository.findByWork_id(studentWorks.get(i).getMyStudentWorkKey().getWork_id())));
+        scientific_works.forEach(s -> studentWorks.addAll(studentWorksRepository.findAllByWork_Id(s.getWork_id())));
+        Map<Scientific_work, Student_work> map = new HashMap<>();
+        IntStream.range(0, studentWorks.size()).forEachOrdered(i -> map.put(scientificWorksRepository.findByWork_id(studentWorks.get(i).getMyStudentWorkKey().getWork_id()), studentWorks.get(i)));
         return map;
     }
 
-    public Map<Student_work, Scientific_work> findByTitle(String t) {
+    public Map<Scientific_work, Student_work> findWorksByStudentStudent_id(Long id) {
+        val studentWorks = studentWorksRepository.findByStudentStudent_id(id);
+        return getStudent_workScientific_workMap(studentWorks);
+    }
+
+    public Map<Scientific_work, Student_work> findByTitle(String t) {
         val studentWorks = studentWorksRepository.findAllByTitleContaining(t);
         return getStudent_workScientific_workMap(studentWorks);
     }
 
-    public Map<Student_work, Scientific_work> findByDateInterval(Date d1, Date d2) {
+    public Map<Scientific_work, Student_work> findByDateInterval(Date d1, Date d2) {
         val studentWorks = studentWorksRepository.findAllByStart_dateBeforeAndStart_dateAfter(d1, d2);
         return getStudent_workScientific_workMap(studentWorks);
     }
 
     @NotNull
-    private Map<Student_work, Scientific_work> getStudent_workScientific_workMap(@NotNull List<Student_work> studentWorks) {
+    private Map<Scientific_work, Student_work> getStudent_workScientific_workMap(@NotNull List<Student_work> studentWorks) {
         List<Scientific_work> scientific_works = new ArrayList<>();
         studentWorks.sort(Comparator.comparing(Student_work::getMyStudentWorkKey));
         studentWorks.forEach(s -> scientific_works.add(scientificWorksRepository.findByWork_id(s.getMyStudentWorkKey().getWork_id())));
         return IntStream
                 .range(0, studentWorks.size())
                 .boxed()
-                .collect(Collectors.toMap(studentWorks::get, scientific_works::get, (a, b) -> b));
+                .collect(Collectors.toMap(scientific_works::get, studentWorks::get, (a, b) -> b));
     }
 
-    public Map<Student_work, Scientific_work> findByWork_Id(Long id) {
-        Map<Student_work, Scientific_work> map = new TreeMap<>(Comparator.comparing(Student_work::getMyStudentWorkKey));
-        map.put(studentWorksRepository.findByWork_Id(id).get(0), scientificWorksRepository.findByWork_id(id));
+    public Map<Scientific_work, Student_work> findByWork_Id(Long id) {
+        Map<Scientific_work, Student_work> map = new TreeMap<>(Comparator.comparing(Scientific_work::getWork_id));
+        map.put(scientificWorksRepository.findByWork_id(id), studentWorksRepository.findAllByWork_Id(id).get(0));
         return map;
     }
 

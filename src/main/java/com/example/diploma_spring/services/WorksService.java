@@ -35,19 +35,23 @@ public class WorksService {
         return studentRepository.findFirstByStudent_id(id);
     }
 
-    public Map<Student_work, Scientific_work> findAllWorks() {
+    public Map<Scientific_work, Student_work> findAllWorks() {
         return worksRepository.findAllWorks();
     }
 
-    public Map<Student_work, Scientific_work> findWorksByTeacher_id(Long teacher_id) {
+    public Map<Scientific_work, Student_work> findWorksByTeacher_id(Long teacher_id) {
         return worksRepository.findWorksByTeacherTeacher_id(teacher_id);
     }
 
-    public Map<Student_work, Scientific_work> findByTitle(String title) {
+    public Map<Scientific_work, Student_work> findWorksByStudent_id(Long student_id) {
+        return worksRepository.findWorksByStudentStudent_id(student_id);
+    }
+
+    public Map<Scientific_work, Student_work> findByTitle(String title) {
         return worksRepository.findByTitle(title);
     }
 
-    public Map<Student_work, Scientific_work> findByDateInterval(Date firstDate, Date secondDate) {
+    public Map<Scientific_work, Student_work> findByDateInterval(Date firstDate, Date secondDate) {
         return worksRepository.findByDateInterval(firstDate, secondDate);
     }
 
